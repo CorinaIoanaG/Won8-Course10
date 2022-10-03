@@ -17,9 +17,15 @@ public class ClassRoom {
     public List<Integer> getGradesForDiscipline(String discipline) {
         if (studentList != null) {
             List<Integer> result = new ArrayList<>();
-            for (StudentGrade item : studentList) {
-                if (item.getDiscipline().equals(discipline)) {
+            if (discipline == null) {
+                for (StudentGrade item : studentList) {
                     result.add(item.getGrade());
+                }
+            } else {
+                for (StudentGrade item : studentList) {
+                    if (item.getDiscipline().equals(discipline)) {
+                        result.add(item.getGrade());
+                    }
                 }
             }
             return result;
@@ -44,29 +50,15 @@ public class ClassRoom {
         List<Integer> result = getGradesForDiscipline(discipline);
         if (result != null) {
             Integer maxim = Collections.max(result);
-            int index = studentList.indexOf(maxim);
-            if (index == studentList.indexOf(discipline) && index >= 0) {
-                return studentList.get(index);
+            if (discipline == null) {
+                return studentList.get(result.indexOf(maxim));
             } else {
                 for (StudentGrade element : studentList) {
-                    if (element.getGrade() == maxim && element.getDiscipline() == discipline) {
+                    if (element.getDiscipline().equals(discipline) && element.getGrade() == maxim) {
                         return element;
                     }
                 }
             }
-        }
-        return null;
-    }
-
-    public StudentGrade getMaxGrade() {
-        if (studentList != null) {
-            List<Integer> result = new ArrayList<>();
-            for (StudentGrade item: studentList){
-                result.add(item.getGrade());
-            }
-            Integer maxim = Collections.max(result);
-            int index = result.indexOf(maxim);
-            return studentList.get(index);
         }
         return null;
     }
@@ -81,19 +73,20 @@ public class ClassRoom {
     }
 
     public StudentGrade getWorstGrade(String discipline) {
-        if (studentList != null) {
-            Integer minim = Integer.MAX_VALUE;
-            for (int i = 0; i < studentList.size(); i++) {
-                if (studentList.get(i).getGrade() != null) {
-                    if (studentList.get(i).getGrade() < minim) {
-                        minim = studentList.get(i).getGrade();
+        List<Integer> result = getGradesForDiscipline(discipline);
+        if (result != null) {
+            Integer minim = Collections.min(result);
+            if (discipline == null) {
+                return studentList.get(result.indexOf(minim));
+            } else {
+                for (StudentGrade element : studentList) {
+                    if (element.getDiscipline().equals(discipline) && element.getGrade() == minim) {
+                        return element;
                     }
                 }
             }
-            return studentList.get(studentList.indexOf(minim));
-        } else {
-            return null;
         }
+        return null;
     }
 
 }
